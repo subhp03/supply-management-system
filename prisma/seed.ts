@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../app/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ async function main(){
       name: `Product ${i + 1}`,
       price: (Math.random() * 90 + 10).toFixed(2),
       quantity: Math.floor(Math.random() * 20),
-      lowStockAt: 5,
+      lowstockAt: 5,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * (i * 5)),
     })),
   });
@@ -20,3 +20,12 @@ async function main(){
   console.log("Seed data created successfully!");
   console.log(`Created 25 products for user ID: ${demouserId}`);
 }
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
